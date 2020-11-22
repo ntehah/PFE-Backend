@@ -8,6 +8,7 @@ import com.memoire.entity.Sujet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -24,8 +25,10 @@ public interface SujetRepository  extends JpaRepository<Sujet, Long> {
     List<Sujet> findSujetsByFillieres(Filliere filliere);
     List<Sujet> findSujetsByEnsigniant(Ensigniant ensigniant);
 
-    @RestResource(path = "/BytitreSujetContains")
-    List<Sujet> findBytitreSujetContains( @Param("mc") String mc);
-    @RestResource(path = "/BytitreSujetContainspage")
-    Page<Sujet> findBytitreSujetContains( @Param("mc") String mc,Pageable pageable);
+    @Query(value="select n from Sujet n")
+    public Page<Sujet> affichierSujet(Pageable pageable);
+    @Query(value="select a from Sujet a where a.titreSujet like :x or a.description like :x "+ " or a.resultatsattendus like :x")
+
+    public Page<Sujet>chercherSujet(@Param("x") String motcle, Pageable pageable);
+
 }

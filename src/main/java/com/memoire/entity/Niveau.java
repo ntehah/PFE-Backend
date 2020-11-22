@@ -25,7 +25,7 @@ public class Niveau {
     @OneToMany
     @JsonIgnore
     private Collection<Groupe> groupes;
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     private Filliere filliere;
     private String code;

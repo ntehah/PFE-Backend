@@ -38,7 +38,7 @@ public class Filliere {
     @JsonIgnore
     private Collection<Niveau> niveaus;
     @ManyToOne
-    @JsonIgnore
+
     private Departement departement;
     @JsonFormat(pattern = "dd-MM-yyyy")
 
@@ -58,7 +58,9 @@ public class Filliere {
     @JsonIgnore
     private ParamatrageAnnee paramatrageAnnee;
 
-
+    @ManyToOne
+    @JsonIgnore
+    private PlanningSoutenance planningSoutenance;
     public long getId() {
         return id;
     }

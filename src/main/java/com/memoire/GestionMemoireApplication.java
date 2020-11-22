@@ -84,8 +84,9 @@ public class GestionMemoireApplication  {
 //			accontService.saveGroup( "Groupe1","Develeoppment_Informatique","Licence3");
 //			accontService.saveGroup( "Groupe2","Develeoppment_Informatique","Licence3");
 //			accontService.saveGroup( "Groupe3","Develeoppment_Informatique","Licence3");
-//			accontService.saveEtudint("IP17660","Meimoune","Med salem","Develeoppment_Informatique","Licence3","Groupe1");
-//			accontService.saveEtudint("l31256","lbekay","Med salem","Informatique du Gestion","Licence3","Groupe1");
+//
+//
+//
 //			accontService.saveEtudint("l31123","sara","Med ","Statistique appliquee a l Economie","Licence3","Groupe1");
 //			accontService.saveEtudint("l35678","Aly","Atigh","Techniques  Commerciales et Marketing","Licence3","Groupe2");
 //			accontService.saveEtudint("l3006","Melike","babe","Banques & Assurances","Licence3","Groupe2");
@@ -94,19 +95,16 @@ public class GestionMemoireApplication  {
 //			accontService.saveEtudint("l3700","faty","sidi","Banques & Assurances","Licence3","Groupe2");
 //			accontService.saveEtudint("l30412","vayze","salem","Gestion des Ressources Humaines","Licence3","Groupe2");
 //			accontService.saveEtudint("l38702","Iman","salem","Reseaux informatiques et Telecommunications","Licence3","Groupe2");
-//			accontService.saveEtudint("IP17659","Mouna","Isselmou","Develeoppment_Informatique","Licence3","Groupe1");
+//			accontService.saveEtudint("IP17660","Meimoune","Med salem","Develeoppment_Informatique","Licence3","Groupe1");
+//			accontService.saveEtudint("IP17659","Mouna","Isselmou","Develeoppment_Informatique","Licence3","Groupe2");
 //			accontService.saveEtudint("IE17623","ediye","babe ahmed","Develeoppment_Informatique","Licence3","Groupe1");
+//			accontService.saveEtudint("l31256","lbekay","Med salem","Informatique du Gestion","Licence3","Groupe1");
 //
 //			accontService.addEtudiantToCompte("ediye","ediye@gmail.com");
 //			accontService.addEtudiantToCompte("Meimoune","Meimoune@gmail.com");
 //			accontService.addEtudiantToCompte("Mouna","mouna@gmail.com");
 //			accontService.saveEnsigniant((long) 3679082,"Moussa","Dembe","Méthodes Quantitatives et Informatiques");
 //			accontService.saveEnsigniant((long) 36119845,"Cheikh ","dhib","Méthodes Quantitatives et Informatiques");
-//			accontService.saveEnsigniant((long) 26790987,"Sidi ","bihe","Méthodes Quantitatives et Informatiques");
-//			accontService.saveEnsigniant((long) 22334455,"Hamadi ","med","Management Economie et Droit");
-//
-//
-//
 //			accontService.addEnsegniantToCompte("Cheikh","Cheikh");
 //
 //			accontService.EffectdepertementToEnsegniat("Méthodes Quantitatives et Informatiques","Moussa");
@@ -145,17 +143,16 @@ public class GestionMemoireApplication  {
 //			accontService.DemandeEncadrantSujet("CompangeVaccination","Cheikh");
 ////	     accontService.SavePeriodePropose( new Date(16-8-2020));
 //			accontService.saveJury("jery1");
-//		accontService.saveJury("jery1");
 ////			accontService.saveJury("jery2");
 ////			accontService.saveJury("jery3");
 ////			accontService.saveJury("jery");
 ////			accontService.addEnsegnintToJury("jery1","Moussa");
 ////			accontService.addEnsegnintToJury("jery1","Cheikh");
-//			accontService.SaveParamatrageAnnee("2019-2020");
-//		accontService.SavePeriodePropose(new Date(04/03/2019),new Date(04/04/2019));
-//		accontService.SavePlanigsoutenace(new Date(15/11/2019),new Date(15/12/2019));
-//	accontService.PlaningFilliers("Develeoppment_Informatique","2019-2020",new Date(04/03/2019),new Date(20/11/2019));
-//accontService.SoutenaceFilliers("Develeoppment_Informatique",new Date(20/11/2019),new Date(15/12/2019));
+////			accontService.SaveParamatrageAnnee("2019-2020");
+//			accontService.SavePeriodePropose(new Date(04/03/2019),new Date(04/04/2019));
+//			accontService.SavePlanigsoutenace(new Date(15/11/2019),new Date(15/12/2019));
+//			accontService.PlaningFilliers("Develeoppment_Informatique","2019-2020",new Date(04/03/2019),new Date(20/11/2019));
+//			accontService.SoutenaceFilliers("Develeoppment_Informatique",new Date(20/11/2019),new Date(15/12/2019));
 //
 //
 //

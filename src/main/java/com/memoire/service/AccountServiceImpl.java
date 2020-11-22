@@ -81,6 +81,7 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
     }
 
     public User loadUsername (String username){
+
         return userRepository.findByUsername(username);
     }
 
@@ -208,6 +209,28 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         paramatragePeriodeProposeRepository.save(paramatragePeriodePropose);
         return paramatragePeriodePropose;
     }
+
+//    @Override
+//    public PlanningSoutenance SavePlanigsoutenace(Date dateSoutence , Date findateSoutence) {
+//        PlanningSoutenance planningSoutenance1 = planningSoutenanceRepository.findByFindateSoutence(findateSoutence);
+//        if (planningSoutenance1 != null) throw new RuntimeException("planningSoutenance1 already exists");
+//        PlanningSoutenance planningSoutenance = new PlanningSoutenance();
+//        planningSoutenance.setDateSoutence(dateSoutence);
+//        planningSoutenance.setFindateSoutence(findateSoutence);
+//        planningSoutenanceRepository.save(planningSoutenance);
+//        return  planningSoutenance;
+//    }
+//
+//    @Override
+//    public void SoutenaceFilliers(String nomfilliere, Date dateSoutencePrevu, Date findateSoutence) {
+//        PlanningSoutenance planningSoutenance = planningSoutenanceRepository.findByDateSoutencePrevu(dateSoutencePrevu);
+//
+//        Filliere filliere = filliereRepository.findByNomfilliere(nomfilliere);
+//        filliere.setPlanningSoutenance(planningSoutenanceRepository.findByDateSoutencePrevu(dateSoutencePrevu));
+//        filliere.setPlanningSoutenance(planningSoutenanceRepository.findByFindateSoutence(findateSoutence));
+//
+////        planningSoutenance.getFilliere().add(filliere);
+//    }
 
 //    @Override
 //    public PlanningSoutenance SavePlanigsoutenace(Date dateSoutence , Date findateSoutence) {
@@ -417,6 +440,26 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
+    public void supprimerGoupe(Long id) {
+        this.groupRepository.deleteById(id);
+    }
+
+    @Override
+    public void supprimerDepartement(Long id) {
+        this.departementRepository.deleteById(id);
+    }
+
+    @Override
+    public void supprimerEnsegnint(Long id) {
+        this.ensigniantRepository.deleteById(id);
+    }
+
+    @Override
+    public void supprimerEtudiant(Long id) {
+        this.etudiantRepository.deleteById(id);
+    }
+
+    @Override
     public void PlaningFilliers(String nomfilliere, String anneeEncours, Date debutperiodeProposesujet ,Date finperiodeProposesujet) {
 //        ParamatragePeriodePropose paramatragePeriodePropose = paramatragePeriodeProposeRepository.findByDebutperiodeProposesujet(debutperiodeProposesujet);
 //        PlanningSoutenance planningSoutenance = planningSoutenanceRepository.findByDateSoutence(dateSoutence);
@@ -462,6 +505,160 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         Pageable pageable=PageRequest.of(page, size);
         return niveouRepository.chercherNiveau("%"+nomNiveou+"%",pageable);
     }
+
+    @Override
+    public Niveau modifierNiveau(long id, Niveau o) {
+        o.setId(id);
+        return niveouRepository.save(o);
+    }
+
+
+    @Override
+    public Ensigniant modifierEnsegniant(long id, Ensigniant o) {
+        o.setId(id);
+        return ensigniantRepository.save(o);
+    }
+
+    @Override
+    public Groupe modifierGroupe(long id, Groupe o) {
+        o.setId(id);
+        return groupRepository.save(o);
+    }
+
+    @Override
+    public Filliere modifierFilliere(long id, Filliere o) {
+        o.setId(id);
+        return filliereRepository.save(o);
+    }
+
+    @Override
+    public Departement modifierDepartement(long id, Departement o) {
+        o.setId(id);
+        return departementRepository.save(o);
+    }
+
+    @Override
+    public Sujet modifierSujet(long id, Sujet o) {
+        o.setId(id);
+        return sujetRepository.save(o);
+    }
+
+    @Override
+    public Page<Etudiant> afficherAllEtudiant(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return etudiantRepository.affichierEtudiant(pageable);
+    }
+
+    @Override
+    public Page<Etudiant> chercherEtudiant(String matriculeetudiant, int page, int size) {
+        Pageable pageable=PageRequest.of(page, size);
+        return etudiantRepository.chercherEtudiant("%"+matriculeetudiant+"%",pageable);
+    }
+
+//    @Override
+//    public Etudiant modifierEtudiant(long id, Etudiant o) {
+//        o.setId(id);
+//        return etudiantRepository.save(o);
+//    }
+
+    @Override
+    public Page<Filliere> afficherAllFilliere(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return filliereRepository.affichierFilliere(pageable);
+    }
+
+    @Override
+    public Page<Ensigniant> afficherEnsigniant(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return ensigniantRepository.affichierEnsigniant(pageable);
+    }
+
+    @Override
+    public Page<Groupe> afficherGroupe(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return groupRepository.affichierGroupe(pageable);
+    }
+
+    @Override
+    public Page<Ensigniant> chercherEnsigniant(String nomEnseigniant, int page, int size) {
+        Pageable pageable=PageRequest.of(page, size);
+        return ensigniantRepository.chercherEnsigniant("%"+nomEnseigniant+"%",pageable);
+    }
+
+    @Override
+    public Page<Filliere> chercherFilliere(String nomfilliere, int page, int size) {
+        Pageable pageable=PageRequest.of(page, size);
+        return filliereRepository.chercherFilliere("%"+nomfilliere+"%",pageable);
+    }
+
+    @Override
+    public Page<Groupe> chercherGroupe(String nomGrp, int page, int size) {
+        Pageable pageable=PageRequest.of(page, size);
+        return groupRepository.chercherGroupe("%"+nomGrp+"%",pageable);
+    }
+
+    @Override
+    public Page<Sujet> afficherAllSujet(int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return sujetRepository.affichierSujet(pageable);
+    }
+
+    @Override
+    public Page<Sujet> chercherSujet(String titreSujet, int page, int size) {
+        Pageable pageable=PageRequest.of(page, size);
+        return sujetRepository.chercherSujet("%"+titreSujet+"%",pageable);
+    }
+
+    @Override
+    public Niveau afficherByIdNiveau(long id) {
+
+        // TODO Auto-generated method stub
+        return niveouRepository.findById(id).get();
+    }
+
+    @Override
+    public Departement afficherByIdDepartement(long id) {
+        return departementRepository.findById(id).get();
+    }
+
+    @Override
+    public Filliere afficherByIdFillier(long id) {
+        return filliereRepository.findById(id).get();
+    }
+
+    @Override
+    public Groupe afficherByIdGroup(long id) {
+        return groupRepository.findById(id).get();
+    }
+
+    @Override
+    public Ensigniant afficherByIdEnsegniant(long id) {
+        return ensigniantRepository.findById(id).get();
+    }
+
+    @Override
+    public Etudiant afficherByIdEtudiant(long id)
+    {
+        return etudiantRepository.findById(id).get();
+    }
+
+    @Override
+    public Sujet afficherByIdSujet(long id) {
+        return sujetRepository.findById(id).get();    }
+
+    @Override
+    public void supprimerSujet(Long id) {
+        this.sujetRepository.deleteById(id);
+    }
+
+    @Override
+    public void supprimerNiveou(Long id) {
+        this.niveouRepository.deleteById(id);
+
+    }
+
+
+
 //
 //        Filliere filliere = filliereRepository.findByNomfilliere(nomfilliere);
 //        if (filliere != null) throw new RuntimeException("Planig filliers already exists");

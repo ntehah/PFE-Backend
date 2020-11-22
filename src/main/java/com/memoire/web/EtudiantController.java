@@ -30,6 +30,31 @@ public class EtudiantController {
 //
 //        }
 
+    @GetMapping("/SoumisionEtudiant")
+    public List<Sujet> ListSoumission() {
+        List<Sujet> sujetList = new ArrayList<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        System.out.println("USERNAME: "+name);
+        User user = userRepository.findByUsername(name);
+        Collection<Etudiant> etudiants = user.getEtudiants();
+        if (etudiants != null) {
+            etudiants.forEach(etudiant -> {
+                if (etudiant.getGroupe() != null) {
+                    List<Sujet> list = sujetRepository.findSujetsByGroupe(etudiant.getGroupe());
+                    list.forEach(sujet -> {
+                        if(sujet.getValider())
+                            sujetList.add(sujet);
+                    });
+                }
+
+            });
+        }
+
+        return sujetList;
+    }
+
+
     @GetMapping("/EtudiantListeSujetPropose")
     public List<Sujet> ListeSujet() {
         List<Sujet> sujetList = new ArrayList<>();
@@ -43,6 +68,7 @@ public class EtudiantController {
                 if (etudiant.getGroupe() != null) {
                     List<Sujet> list = sujetRepository.findSujetsByGroupe(etudiant.getGroupe());
                     list.forEach(sujet -> {
+                        if(!sujet.getValider())
                         sujetList.add(sujet);
                     });
                 }
@@ -59,6 +85,7 @@ public class EtudiantController {
         String name = authentication.getName();
         System.out.println("USERNAME: "+name);
         User user = userRepository.findByUsername(name);
+
         Optional<Etudiant> etudiantOptional=user.getEtudiants().stream().findFirst();
         if (etudiantOptional.isPresent()){
             return etudiantOptional.get().getGroupe();

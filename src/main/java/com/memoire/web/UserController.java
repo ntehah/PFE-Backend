@@ -119,11 +119,24 @@ public class UserController {
 //    }
 
 
-    @GetMapping("/supprimerFilliere/{id}")
-    public void supprimerFilliere(@PathVariable("id") Long id) {
-        accountService.supprimerFilliere(id);
+//    @GetMapping("/supprimerFilliere/{id}")
+//    public void supprimerFilliere(@PathVariable("id") Long id) {
+//        accountService.supprimerFilliere(id);
+//    }
+@GetMapping("/DemandeEncadrantSujet/{titreSujet}/{nomEnseigniant}")
+public Sujet DemandeEncadrantSujet(@PathVariable("titreSujet") String titreSujet, @PathVariable("nomEnseigniant") String nomEnseigniant) {
+    return accountService.DemandeEncadrantSujet(titreSujet, nomEnseigniant);
+}
+
+    @GetMapping("/ValiderDemendeEncadrant/{titreSujet}")
+    public Sujet ValiderDemendeEncadrant(@PathVariable("titreSujet") String titreSujet) {
+        return accountService.ValiderDemendeEncadrant(titreSujet);
     }
 
+    @GetMapping("/RefuserDemendeEncadrant/{titreSujet}")
+    public Sujet RefuserDemendeEncadrant(@PathVariable String titreSujet) {
+        return accountService.RefuserDemendeEncadrant(titreSujet);
+    }
     @GetMapping("/effectFilterToSujet/{nomfilliere}/{nomEnseigniant}")
     public void EffectFilterToSujet(@PathVariable("nomfilliere") String nomfilliere, @PathVariable("nomEnseigniant") String nomEnseigniant) {
         accountService.EffectFilterToSujet(nomfilliere, nomEnseigniant);
@@ -165,7 +178,7 @@ public class UserController {
 
     @GetMapping("/user/{username}")
     public User getUserByUserName(@PathVariable String username) {
-
+        System.out.println(username);
         return accountService.loadUsername(username);
     }
 
@@ -213,6 +226,177 @@ public class UserController {
             @RequestParam(name = "size", defaultValue = "5") int size) {
         return accountService.chercherNiveau(nom, page, size);
     }
+
+    @GetMapping("/listEtudiant")
+    public Page<Etudiant> afficherAllEtudiant(
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="1") int size){
+        return accountService.afficherAllEtudiant(page, size);
+    }
+
+    @GetMapping(value="/chercherEtudiant")
+    public Page<Etudiant> chercherEtudiant(
+            @RequestParam(name="matriculeetudiant",defaultValue ="") String matriculeetudiant,
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="5") int size){
+        return accountService.chercherEtudiant(matriculeetudiant, page, size);
+    }
+
+    @GetMapping("/listFilliere")
+    public Page<Filliere> afficherAllFilliere(
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="1") int size){
+        return accountService.afficherAllFilliere(page, size);
+    }
+
+    @GetMapping(value="/chercherFilliere")
+    public Page<Filliere> chercherFilliere(
+            @RequestParam(name="nomfilliere",defaultValue ="") String nomfilliere,
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="5") int size){
+        return accountService.chercherFilliere(nomfilliere, page, size);
+    }
+    @GetMapping("/listEnsigniant")
+    public Page<Ensigniant> afficherEnsigniant(
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="1") int size){
+        return accountService.afficherEnsigniant(page, size);
+    }
+
+
+    @GetMapping(value="/chercherEnsigniant")
+    public Page<Ensigniant> chercherEnsigniant(
+            @RequestParam(name="nomEnseigniant",defaultValue ="") String nomEnseigniant,
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="5") int size){
+        return accountService.chercherEnsigniant(nomEnseigniant, page, size);
+    }
+    @GetMapping("/listGroupe")
+    public Page<Groupe> afficherGroupe(
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="1") int size){
+        return accountService.afficherGroupe(page, size);
+    }
+
+    @GetMapping(value="/chercherGroupe")
+    public Page<Groupe> chercherGroupe(
+            @RequestParam(name="nomGrp",defaultValue ="") String nomGrp,
+            @RequestParam(name="page",defaultValue ="0") int page,
+            @RequestParam(name="size",defaultValue ="5") int size){
+        return accountService.chercherGroupe(nomGrp, page, size);
+    }
+
+    @GetMapping(value="/afficherByIdNiveau/{id}")
+    public Niveau getBylistNiveaus(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdNiveau(id);
+    }
+    @GetMapping(value="/afficherByIdGroup/{id}")
+    public Groupe getBylistGroup(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdGroup(id);
+    }
+    @GetMapping(value="/afficherByIdFillier/{id}")
+    public Filliere getBylistFillier(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdFillier(id);
+    }
+
+    @GetMapping(value="/afficherByIdDepartement/{id}")
+    public Departement getBylistDepartement(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdDepartement(id);
+    }
+
+    @GetMapping(value="/afficherByIdEtudiant/{id}")
+    public Etudiant getBylistEtudiant(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdEtudiant(id);
+    }
+    @GetMapping(value="/afficherByIdEnsegniant/{id}")
+    public Ensigniant getBylistEnsigniant(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdEnsegniant(id);
+    }
+
+    @GetMapping(value="/supprimerNiveou/{id}")
+    public void supprimerNiveou(@PathVariable(name="id")long id) {
+        accountService.supprimerNiveou(id);
+    }
+    @GetMapping(value="/supprimerFilliere/{id}")
+    public void supprimerFilliere(@PathVariable(name="id")long id) {
+        accountService.supprimerFilliere(id);
+    }
+    @GetMapping(value="/supprimerDepartement/{id}")
+    public void supprimerDepartement(@PathVariable(name="id")long id) {
+        accountService.supprimerDepartement(id);
+    }
+    @GetMapping(value="/supprimerGoupe/{id}")
+    public void supprimerGoupe(@PathVariable(name="id")long id) {
+        accountService.supprimerGoupe(id);
+    }
+    @GetMapping(value="/supprimerEnsegnint/{id}")
+    public void supprimerEnsegnint(@PathVariable(name="id")long id) {
+        accountService.supprimerEnsegnint(id);
+    }
+
+
+
+    @GetMapping(value="/supprimerEtudiant/{id}")
+    public void supprimerEtudiant(@PathVariable(name="id")long id) {
+        accountService.supprimerEtudiant(
+                id);
+    }
+
+    @PutMapping(value="/modifierNiveau/{id}")
+    public Niveau  modifierNiveau(@PathVariable(name="id") long id,@RequestBody Niveau o) {
+        return accountService.modifierNiveau (id,o);
+    }
+    @PutMapping(value="/modifierDepartement/{id}")
+    public Departement  modifierDepartement(@PathVariable(name="id") long id,@RequestBody Departement o) {
+        return accountService.modifierDepartement (id,o);
+    }
+
+    @PutMapping(value="/modifierFilliere/{id}")
+    public Filliere  modifierFilliere(@PathVariable(name="id") long id,@RequestBody Filliere o) {
+        return accountService.modifierFilliere (id,o);
+    }
+//    @PutMapping(value="/modifierEtudiant/{id}")
+//    public Etudiant  modifierEtudiant(@PathVariable(name="id") long id,@RequestBody Etudiant o) {
+//        return accountService.modifierEtudiant (id,o);
+//    }
+    @PutMapping(value="/modifierEnsegniant/{id}")
+    public Ensigniant  modifierEnsegniant(@PathVariable(name="id") long id,@RequestBody Ensigniant o) {
+        return accountService.modifierEnsegniant (id,o);
+    }
+    @PutMapping(value="/modifierGroupe/{id}")
+    public Groupe  modifierGroupe(@PathVariable(name="id") long id,@RequestBody Groupe o) {
+        return accountService.modifierGroupe (id,o);
+    }
+    @GetMapping("/listSujet")
+    public Page<Sujet> afficherAllSujet(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "1") int size) {
+        return accountService.afficherAllSujet(page, size);
+    }
+
+    @GetMapping(value = "/chercherSujet")
+    public Page<Sujet> chercherSujet(
+            @RequestParam(name = "nomNiveou", defaultValue = "") String nom,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        return accountService.chercherSujet(nom, page, size);
+    }
+    @GetMapping(value="/afficherByIdSujet/{id}")
+    public Sujet getBylistSujetr(@PathVariable(name="id")long id) {
+        return accountService.afficherByIdSujet(id);
+    }
+
+    @GetMapping(value="/supprimerSujet/{id}")
+    public void supprimerSujet(@PathVariable(name="id")long id) {
+        accountService.supprimerSujet(
+                id);
+    }
+
+    @PutMapping(value="/modifierSujet/{id}")
+    public Sujet  modifierSujet(@PathVariable(name="id") long id,@RequestBody Sujet o) {
+        return accountService.modifierSujet(id,o);
+    }
+
 }
 
 @Data

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface DepartementRepository extends JpaRepository<Departement, String> {
+public interface DepartementRepository extends JpaRepository<Departement, Long> {
     public Departement findByNomDepartement(String nomDepartement);
 
 }

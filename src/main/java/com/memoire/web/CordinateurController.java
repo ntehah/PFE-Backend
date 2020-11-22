@@ -77,7 +77,6 @@ public class CordinateurController {
         PlanningSoutenance planningSoutenance1 = planningSoutenanceRepository.save(planningSoutenance);
         if (planningSoutenance1 != null) {
             return true;
-
         }
         return false;
     }

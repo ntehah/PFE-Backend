@@ -15,7 +15,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 public class Etudiant implements Serializable {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private  long id;
     private String matriculeetudiant;
     private String nom;
     private String prenom;

@@ -61,6 +61,24 @@ public class EnsegniatController {
 
         return sujetList;
     }
+
+    @GetMapping("listsujetpouretudiant")
+    public List<Sujet> Liste() {
+        List<Sujet> sujetList = new ArrayList<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        System.out.println("USERNAME: " + name);
+        User user = userRepository.findByUsername(name);
+        Optional<Etudiant> etudiant = user.getEtudiants().stream().findFirst();
+        if (etudiant.isPresent()) {
+                List<Sujet> list = sujetRepository.findSujetsByFillieres(etudiant.get().getFilliere());
+                list.forEach(sujet -> {
+                    sujetList.add(sujet);
+            });
+        }
+
+        return sujetList;
+    }
 //    @GetMapping("/nomEnseginat")
 //    public String getNomEnsgniet(String nomEnseigniant) {
 //        return ensigniantRepository.findByNomEnseigniant(nomEnseigniant);
@@ -71,20 +89,7 @@ public class EnsegniatController {
 //        return accountService.validerSujet(titreSujet);
 //    }
 
-    @GetMapping("/DemandeEncadrantSujet/{titreSujet}/{nomEnseigniant}")
-    public Sujet DemandeEncadrantSujet(@PathVariable("titreSujet") String titreSujet, @PathVariable("nomEnseigniant") String nomEnseigniant) {
-        return accountService.DemandeEncadrantSujet(titreSujet, nomEnseigniant);
-    }
 
-    @GetMapping("/ValiderDemendeEncadrant/{titreSujet}")
-    public Sujet ValiderDemendeEncadrant(@PathVariable("titreSujet") String titreSujet) {
-        return accountService.ValiderDemendeEncadrant(titreSujet);
-    }
-
-    @GetMapping("/RefuserDemendeEncadrant/{titreSujet}")
-    public Sujet RefuserDemendeEncadrant(@PathVariable String titreSujet) {
-        return accountService.RefuserDemendeEncadrant(titreSujet);
-    }
 
     //    @PostMapping("/DemandeEncadrantSujet")
 //    public Sujet DemandeEncadrantSujet(@PathVariable String titreSujet ,
@@ -97,7 +102,7 @@ public class EnsegniatController {
         Optional<Groupe> optionalGroupe = groupRepository.findById(idGroupe);
         if (optionalSujet.isPresent() && optionalGroupe.isPresent()) {
             Demande demande1 = demandRepository.findDemandeByGroupe(optionalGroupe.get());
-            if (demande1 != null) {
+            if (demande1 == null) {
                 Demande demande = new Demande();
                 demande.setSujet(optionalSujet.get());
                 demande.setGroupe(optionalGroupe.get());

@@ -28,6 +28,12 @@ public  interface AccountService {
     public  ParamatrageAnnee SaveParamatrageAnnee(String anneeEncours);
     public  ParamatragePeriodePropose SavePeriodePropose(Date debutperiodeProposesujet,Date finperiodeProposesujet);
 //    public PlanningSoutenance SavePlanigsoutenace(Date dateSoutence,Date findateSoutence);
+//public PlanningSoutenance SavePlanigsoutenace(Date dateSoutence,Date findateSoutence);
+//    public  void PlaningFilliers(String  nomfilliere,String anneeEncours,Date debutperiodeProposesujet,Date finperiodeProposesujet);
+//    public  void SoutenaceFilliers(String  nomfilliere,Date dateSoutence,Date findateSoutence);
+
+
+
     public  void addEtudiantToGroup(String nomGrp,String matriculeetudiant);
     public  void addEnsegnintToJury(String idJury,String nomEnseigniant);
    public Sujet ProposeSujetParGrp(String titreSujset, String nomEntreprice,String nomGrp,String description);
@@ -56,11 +62,45 @@ public  interface AccountService {
     public  Sujet RefuserDemendeEncadrant(String titreSujet);
     public  Sujet DetaillesSujet(String titreSujet);
     Ensigniant getEnseignantById(long id);
-    public void supprimerFilliere(Long id);
+
     public  void PlaningFilliers(String  nomfilliere,String anneeEncours,Date debutperiodeProposesujet,Date finperiodeProposesujet);
 //    public  void SoutenaceFilliers(String  nomfilliere,Date dateSoutence,Date findateSoutence);
     public  List<Groupe> getGroupeFilliere(String nomfilliere );
     public Page<Niveau> afficherAllNiveau(int page, int size);
     public Page<Niveau> chercherNiveau(String nomNiveou,int page,int size);
+    public Niveau modifierNiveau(long id,Niveau o);
+//    public Etudiant modifierEtudiant(long id,Etudiant o);
+    public Ensigniant modifierEnsegniant(long id,Ensigniant o);
+    public Groupe modifierGroupe(long id,Groupe o);
+    public Filliere modifierFilliere(long id,Filliere o);
+    public Departement modifierDepartement(long id,Departement o);
+    public Sujet modifierSujet(long id,Sujet o);
+    public Page<Etudiant> afficherAllEtudiant(int page, int size);
+    public Page<Etudiant> chercherEtudiant(String matriculeetudiant,int page,int size);
+
+    public Page<Filliere> afficherAllFilliere(int page, int size);
+    public Page<Ensigniant> afficherEnsigniant(int page, int size);
+    public Page<Groupe> afficherGroupe(int page, int size);
+    public Page<Ensigniant> chercherEnsigniant(String nomEnseigniant,int page,int size);
+    public Page<Filliere> chercherFilliere(String nomfilliere,int page,int size);
+    public Page<Groupe> chercherGroupe(String nomGrp,int page,int size);
+    public Page<Sujet> afficherAllSujet(int page, int size);
+    public Page<Sujet> chercherSujet(String titreSujet,int page,int size);
+    public Niveau afficherByIdNiveau(long id);
+    public Departement afficherByIdDepartement(long id);
+    public Filliere afficherByIdFillier(long id);
+    public Groupe afficherByIdGroup(long id);
+    public Ensigniant afficherByIdEnsegniant(long id);
+    public Etudiant afficherByIdEtudiant(long id);
+    public Sujet afficherByIdSujet(long id);
+    public void supprimerSujet(Long id);
+    public void supprimerNiveou(Long id);
+    public void supprimerFilliere(Long id);
+    public void supprimerGoupe(Long id);
+    public void supprimerDepartement(Long id);
+    public void supprimerEnsegnint(Long id);
+    public void supprimerEtudiant(Long id);
+
+
 
 }

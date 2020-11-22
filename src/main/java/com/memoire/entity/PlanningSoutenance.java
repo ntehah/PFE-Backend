@@ -21,7 +21,8 @@ public class PlanningSoutenance implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "debutSoutenace")
+    @Column(name = "debutSoutenacePrevu")
+   private Date dateSoutencePrevu;
     private Date dateSoutence;
 
     private int salle;
@@ -40,7 +41,7 @@ public class PlanningSoutenance implements Serializable {
     private boolean soutene;
     private int note;
     private String mention;
-
+private  Date findateSoutence;
     public long getId() {
         return id;
     }
