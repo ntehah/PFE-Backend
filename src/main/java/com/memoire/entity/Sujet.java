@@ -44,10 +44,6 @@ public class Sujet implements Serializable {
     private Groupe groupe;
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "AnneeEncours")
-    private ParamatrageAnnee paramatrageAnnee;
-    @JsonIgnore
-    @ManyToOne
     @JoinColumn(name = "cordintereValider")
     private Cordinateur cordinateur;
     @JsonIgnore
@@ -71,6 +67,8 @@ public class Sujet implements Serializable {
     @JoinColumn(name = "periodePropose")
     private ParamatragePeriodePropose paramatragePeriodePropose;
 
+    private String anneeencours;
+
     public Entreprise getEntreprise() {
         return entreprise;
     }
@@ -85,6 +83,14 @@ public class Sujet implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAnneeencours() {
+        return anneeencours;
+    }
+
+    public void setAnneeencours(String anneeencours) {
+        this.anneeencours = anneeencours;
     }
 
     public String getTitreSujet() {
@@ -173,14 +179,6 @@ public class Sujet implements Serializable {
 
     public void setGroupe(Groupe groupe) {
         this.groupe = groupe;
-    }
-
-    public ParamatrageAnnee getParamatrageAnnee() {
-        return paramatrageAnnee;
-    }
-
-    public void setParamatrageAnnee(ParamatrageAnnee paramatrageAnnee) {
-        this.paramatrageAnnee = paramatrageAnnee;
     }
 
     public Cordinateur getCordinateur() {

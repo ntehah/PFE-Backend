@@ -1,12 +1,8 @@
 package com.memoire.service;
 
 import com.memoire.entity.*;
-import com.sun.javafx.sg.prism.EffectFilter;
-import javafx.scene.effect.Effect;
 import org.springframework.data.domain.Page;
 
-import javax.xml.crypto.Data;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +59,7 @@ public  interface AccountService {
     public  Sujet DetaillesSujet(String titreSujet);
     Ensigniant getEnseignantById(long id);
 
-    public  void PlaningFilliers(String  nomfilliere,String anneeEncours,Date debutperiodeProposesujet,Date finperiodeProposesujet);
+    public  void PlaningFilliers(List<String> nomfilliere, String anneeEncours, Date debutperiodeProposesujet, Date finperiodeProposesujet);
 //    public  void SoutenaceFilliers(String  nomfilliere,Date dateSoutence,Date findateSoutence);
     public  List<Groupe> getGroupeFilliere(String nomfilliere );
     public Page<Niveau> afficherAllNiveau(int page, int size);

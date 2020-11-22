@@ -2,7 +2,6 @@ package com.memoire.service;
 
 import com.memoire.dao.*;
 import com.memoire.entity.*;
-import javafx.print.Collation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -38,13 +35,13 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private EtudiantRepository etudiantRepository;
     @Autowired
-    private  CordinateurRepository cordinateurRepository;
+    private CordinateurRepository cordinateurRepository;
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
     private EnsigniantRepository ensigniantRepository;
     @Autowired
-    private  FilliereRepository filliereRepository;
+    private FilliereRepository filliereRepository;
     @Autowired
     private NiveouRepository niveouRepository;
     @Autowired
@@ -53,8 +50,8 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     DepartementRepository departementRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-@Autowired
-private PlanningSoutenanceRepository planningSoutenanceRepository;
+    @Autowired
+    private PlanningSoutenanceRepository planningSoutenanceRepository;
 
     public AccountServiceImpl(UserRepository userRepository, RoleRepository roleRepoitory, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
@@ -72,20 +69,21 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
         user.setActived(true);
         user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.save(user);
-        addRoleToUser(username,"USER");
+        addRoleToUser(username, "USER");
         return user;
     }
-    public Role save (Role role){
+
+    public Role save(Role role) {
 
         return roleRepoitory.save(role);
     }
 
-    public User loadUsername (String username){
+    public User loadUsername(String username) {
 
         return userRepository.findByUsername(username);
     }
 
-    public void addRoleToUser (String username, String rolename){
+    public void addRoleToUser(String username, String rolename) {
         User user = userRepository.findByUsername(username);
         Role role = roleRepoitory.findByRoleName(rolename);
         user.getRoles().add(role);
@@ -93,7 +91,7 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
     }
 
     @Override
-    public Niveau saveNiveou(String nomNiveou, String code, String annee,String nomfilliere) {
+    public Niveau saveNiveou(String nomNiveou, String code, String annee, String nomfilliere) {
         Niveau niveau1 = niveouRepository.findByNomNiveou(nomNiveou);
 
 //        if (niveau1 != null) throw new RuntimeException("niveou already exists");
@@ -104,32 +102,34 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
         niveau.setNomNiveou(nomNiveou);
         niveau.setCode(code);
         niveau.setAnnee(annee);
-         niveau.setFilliere(filliereRepository.findByNomfilliere(nomfilliere));
-         niveouRepository.save(niveau);
+        niveau.setFilliere(filliereRepository.findByNomfilliere(nomfilliere));
+        niveouRepository.save(niveau);
         return niveau;
     }
 
 
     @Override
-    public Etudiant saveEtudint(String matriculeetudiant, String nom, String prenom,String nomfilliere,String nomNiveou, String nomGrp) {
+    public Etudiant saveEtudint(String matriculeetudiant, String nom, String prenom, String nomfilliere, String nomNiveou, String nomGrp) {
         Etudiant etudiant1 = etudiantRepository.findByNom(nom);
         if (etudiant1 != null) throw new RuntimeException("etudiant already exists");
         Etudiant etudiant = new Etudiant();
         etudiant.setMatriculeetudiant(matriculeetudiant);
         etudiant.setNom(nom);
-
-        etudiant.setFilliere(filliereRepository.findByNomfilliere(nomfilliere));
-        etudiant.setNiveau(niveouRepository.findByNomNiveou(nomNiveou));
-        etudiant.setGroupe(groupRepository.findByNomGrp(nomGrp));
         etudiant.setPrenom(prenom);
-
+        System.out.println();
+        etudiant.setFilliere(filliereRepository.getOne(Long.valueOf(nomfilliere)));
+        etudiant.setNiveau(niveouRepository.getOne(Long.valueOf(nomNiveou)));
+        Groupe groupe = groupRepository.getOne(Long.valueOf(nomGrp));
+        etudiant.setGroupe(groupe);
+        System.out.println("FIllier : " + filliereRepository.getOne(Long.valueOf(nomfilliere)).getId()
+                + "NIVEAU : " + niveouRepository.getOne(Long.valueOf(nomNiveou)).getId() + "GROUPE : " + groupe.getId());
         etudiantRepository.save(etudiant);
 
         return etudiant;
     }
 
     @Override
-    public void addEtudiantToCompte(String nom,String username) {
+    public void addEtudiantToCompte(String nom, String username) {
         User user = userRepository.findByUsername(username);
         Etudiant etudiant = etudiantRepository.findByNom(nom);
 //        etudiant.setUser(userRepository.findByUsername(username));
@@ -149,11 +149,10 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
 
     @Override
     public void EffectAnneeToSujet(String anneeEncours, String titreSujet) {
-        ParamatrageAnnee paramatrageAnnee = paramatrageAnneeRepository.findByAnneeEncours(anneeEncours);
         Sujet sujet = sujetRepository.findBytitreSujet(titreSujet);
-        sujet.setParamatrageAnnee(paramatrageAnneeRepository.findByAnneeEncours(anneeEncours));
+        sujet.setAnneeencours(anneeEncours);
         sujet.setTitreSujet(titreSujet);
-        paramatrageAnnee.getSujets().add(sujet);
+        sujetRepository.save(sujet);
     }
 
     @Override
@@ -186,7 +185,8 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
         entreprise.setNomEntreprice(nomEntreprice);
         entreprise.setAdresse(adresse);
         entrepriseRepository.save(entreprise);
-        return entreprise;}
+        return entreprise;
+    }
 
     @Override
     public ParamatrageAnnee SaveParamatrageAnnee(String anneeEncours) {
@@ -200,11 +200,11 @@ private PlanningSoutenanceRepository planningSoutenanceRepository;
     }
 
     @Override
-    public ParamatragePeriodePropose SavePeriodePropose(Date debutperiodeProposesujet,Date finperiodeProposesujet) {
+    public ParamatragePeriodePropose SavePeriodePropose(Date debutperiodeProposesujet, Date finperiodeProposesujet) {
         ParamatragePeriodePropose paramatragePeriodePropose1 = paramatragePeriodeProposeRepository.findByDebutperiodeProposesujet(debutperiodeProposesujet);
         if (paramatragePeriodePropose1 != null) throw new RuntimeException("ParamatragePeriodePropose already exists");
         ParamatragePeriodePropose paramatragePeriodePropose = new ParamatragePeriodePropose();
-paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
+        paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         paramatragePeriodePropose.setDebutperiodeProposesujet(debutperiodeProposesujet);
         paramatragePeriodeProposeRepository.save(paramatragePeriodePropose);
         return paramatragePeriodePropose;
@@ -243,7 +243,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 //    }
 
 
-    public Groupe saveGroup(String nomGrp,String nomfilliere,String nomNiveou ){
+    public Groupe saveGroup(String nomGrp, String nomfilliere, String nomNiveou) {
         Groupe groupe1 = groupRepository.findByNomGrp(nomGrp);
 //        if (groupe1 != null) throw new RuntimeException("group already exists");
         Groupe groupe = new Groupe();
@@ -256,23 +256,23 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
-    public void addEtudiantToGroup(String nomGrp,String matriculeetudiant) {
-        Etudiant etudiant=etudiantRepository.findByMatriculeetudiant(matriculeetudiant);
-        Groupe groupe=groupRepository.findByNomGrp(nomGrp);
+    public void addEtudiantToGroup(String nomGrp, String matriculeetudiant) {
+        Etudiant etudiant = etudiantRepository.findByMatriculeetudiant(matriculeetudiant);
+        Groupe groupe = groupRepository.findByNomGrp(nomGrp);
         groupe.getEtudiants().add(etudiant);
 
     }
 
     @Override
     public void addEnsegnintToJury(String idJury, String nomEnseigniant) {
-        Ensigniant ensigniant=ensigniantRepository.findByNomEnseigniant(nomEnseigniant);
-        Jury jury=juryRepository.findByIdJury(idJury);
+        Ensigniant ensigniant = ensigniantRepository.findByNomEnseigniant(nomEnseigniant);
+        Jury jury = juryRepository.findByIdJury(idJury);
         jury.getEnsigniants().add(ensigniant);
 
     }
 
     @Override
-    public Sujet ProposeSujetParGrp(String titreSujet, String nomEntreprice, String nomGrp,String description) {
+    public Sujet ProposeSujetParGrp(String titreSujet, String nomEntreprice, String nomGrp, String description) {
         Sujet sujet1 = sujetRepository.findBytitreSujet(titreSujet);
         if (sujet1 != null) throw new RuntimeException("sujet already exists");
         Sujet sujet = new Sujet();
@@ -287,6 +287,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         sujetRepository.save(sujet);
         return sujet;
     }
+
     public Sujet ProposeSujetParEnseigniat(String titreSujet, String nomEntreprice, String nomEnseigniant) {
 
         Sujet sujet1 = sujetRepository.findBytitreSujet(titreSujet);
@@ -319,7 +320,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
-    public Filliere SaveFillier(String nomfilliere, String Codefilliere,String nomDepartement) {
+    public Filliere SaveFillier(String nomfilliere, String Codefilliere, String nomDepartement) {
         Filliere filliere1 = filliereRepository.findByNomfilliere(nomfilliere);
         if (filliere1 != null) throw new RuntimeException("filiere already exists");
         Filliere filliere = new Filliere();
@@ -331,9 +332,8 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
 
-
     @Override
-    public Departement SaveDepertement(String nomDepartement,String codeDepartement){
+    public Departement SaveDepertement(String nomDepartement, String codeDepartement) {
         Departement departement1 = departementRepository.findByNomDepartement(nomDepartement);
         if (departement1 != null) throw new RuntimeException("departement already exists");
         Departement departement = new Departement();
@@ -343,6 +343,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         departementRepository.save(departement);
         return departement;
     }
+
     @Override
     public void EffectFilterToSujet(String nomfilliere, String titreSujet) {
 
@@ -361,6 +362,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         ensigniant.setNomEnseigniant(nomEnseigniant);
         departement.getEnsigniantsapartient().add(ensigniant);
     }
+
     @Override
     public Cordinateur saveCordinateure(String nomEnseigniant) {
         Cordinateur cordinateur = cordinateurRepository.findByNomEnseigniant(nomEnseigniant);
@@ -373,7 +375,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
-    public void AddCordinateureToFilliere(String nomfilliere , String nomEnseigniant) {
+    public void AddCordinateureToFilliere(String nomfilliere, String nomEnseigniant) {
         Filliere filliere = filliereRepository.findByNomfilliere(nomfilliere);
         Cordinateur cordinateur = cordinateurRepository.findByNomEnseigniant(nomEnseigniant);
         cordinateur.getFillier_cordone().add(filliere);
@@ -381,15 +383,15 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Sujet validerSujet(String titreSujet) {
-       Sujet s =sujetRepository.findBytitreSujet(titreSujet);
-       s.setValider(true);
-       sujetRepository.save(s);
-       return s;
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
+        s.setValider(true);
+        sujetRepository.save(s);
+        return s;
     }
 
     @Override
     public Sujet RefuserSujet(String titreSujet) {
-        Sujet s =sujetRepository.findBytitreSujet(titreSujet);
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
         s.setValider(false);
         sujetRepository.save(s);
         return s;
@@ -397,7 +399,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Sujet DemandeEncadrantSujet(String titreSujet, String nomEnseigniant) {
-        Sujet s =sujetRepository.findBytitreSujet(titreSujet);
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
         s.setDemendeEncadrant(false);
         s.setEncad_acadimique(ensigniantRepository.findByNomEnseigniant(nomEnseigniant));
         sujetRepository.save(s);
@@ -406,21 +408,21 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Sujet ValiderDemendeEncadrant(String titreSujet) {
-        Sujet s =sujetRepository.findBytitreSujet(titreSujet);
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
         s.setDemendeEncadrant(true);
         return s;
     }
 
     @Override
     public Sujet RefuserDemendeEncadrant(String titreSujet) {
-        Sujet s =sujetRepository.findBytitreSujet(titreSujet);
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
         s.setDemendeEncadrant(false);
         return s;
     }
 
     @Override
     public Sujet DetaillesSujet(String titreSujet) {
-        Sujet s =sujetRepository.findBytitreSujet(titreSujet);
+        Sujet s = sujetRepository.findBytitreSujet(titreSujet);
         s.getDescription();
         s.getNbrEtudiantMax();
         s.getNbrEtudiantMin();
@@ -436,7 +438,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public void supprimerFilliere(Long id) {
-     this.filliereRepository.deleteById(id);
+        this.filliereRepository.deleteById(id);
     }
 
     @Override
@@ -460,30 +462,16 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
-    public void PlaningFilliers(String nomfilliere, String anneeEncours, Date debutperiodeProposesujet ,Date finperiodeProposesujet) {
-//        ParamatragePeriodePropose paramatragePeriodePropose = paramatragePeriodeProposeRepository.findByDebutperiodeProposesujet(debutperiodeProposesujet);
-//        PlanningSoutenance planningSoutenance = planningSoutenanceRepository.findByDateSoutence(dateSoutence);
-
-        Filliere filliere = filliereRepository.findByNomfilliere(nomfilliere);
-//        filliere.setParamatragePeriodePropose(paramatragePeriodeProposeRepository.findByDebutperiodeProposesujet(debutperiodeProposesujet));
-//        filliere.setParamatragePeriodePropose(paramatragePeriodeProposeRepository.findByDebutperiodeProposesujet(finperiodeProposesujet));
-//        filliere.setPlanningSoutenance(planningSoutenanceRepository.findByDateSoutence(dateSoutence));
-        filliere.setDebutperiodeProposesujet(debutperiodeProposesujet);
-        filliere.setFinperiodeProposesujet(finperiodeProposesujet);
-        filliere.setParamatrageAnnee(paramatrageAnneeRepository.findByAnneeEncours(anneeEncours));
-
+    public void PlaningFilliers(List<String> list, String anneeEncours, Date debutperiodeProposesujet, Date finperiodeProposesujet) {
+        if (list != null && list.size() > 0)
+            list.forEach(s -> {
+                Filliere filliere = filliereRepository.getOne(Long.valueOf(s));
+                filliere.setDebutperiodeProposesujet(debutperiodeProposesujet);
+                filliere.setFinperiodeProposesujet(finperiodeProposesujet);
+                filliere.setParamatrageAnnee(anneeEncours);
+                filliereRepository.save(filliere);
+            });
     }
-
-//    @Override
-//    public void SoutenaceFilliers(String nomfilliere, Date dateSoutence,Date findateSoutence) {
-//        PlanningSoutenance planningSoutenance = planningSoutenanceRepository.findByDateSoutence(dateSoutence);
-//
-//        Filliere filliere = filliereRepository.findByNomfilliere(nomfilliere);
-//        filliere.setPlanningSoutenance(planningSoutenanceRepository.findByDateSoutence(dateSoutence));
-//        filliere.setPlanningSoutenance(planningSoutenanceRepository.findByFindateSoutence(findateSoutence));
-//
-//planningSoutenance.getFillieres().add(filliere);
-//    }
 
     @Override
     public List<Groupe> getGroupeFilliere(String nomfilliere) {
@@ -496,14 +484,14 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Page<Niveau> afficherAllNiveau(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return niveouRepository.affichierNiveau(pageable);
     }
 
     @Override
     public Page<Niveau> chercherNiveau(String nomNiveou, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return niveouRepository.chercherNiveau("%"+nomNiveou+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return niveouRepository.chercherNiveau("%" + nomNiveou + "%", pageable);
     }
 
     @Override
@@ -545,14 +533,14 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Page<Etudiant> afficherAllEtudiant(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return etudiantRepository.affichierEtudiant(pageable);
     }
 
     @Override
     public Page<Etudiant> chercherEtudiant(String matriculeetudiant, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return etudiantRepository.chercherEtudiant("%"+matriculeetudiant+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return etudiantRepository.chercherEtudiant("%" + matriculeetudiant + "%", pageable);
     }
 
 //    @Override
@@ -563,50 +551,50 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
 
     @Override
     public Page<Filliere> afficherAllFilliere(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return filliereRepository.affichierFilliere(pageable);
     }
 
     @Override
     public Page<Ensigniant> afficherEnsigniant(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return ensigniantRepository.affichierEnsigniant(pageable);
     }
 
     @Override
     public Page<Groupe> afficherGroupe(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return groupRepository.affichierGroupe(pageable);
     }
 
     @Override
     public Page<Ensigniant> chercherEnsigniant(String nomEnseigniant, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return ensigniantRepository.chercherEnsigniant("%"+nomEnseigniant+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return ensigniantRepository.chercherEnsigniant("%" + nomEnseigniant + "%", pageable);
     }
 
     @Override
     public Page<Filliere> chercherFilliere(String nomfilliere, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return filliereRepository.chercherFilliere("%"+nomfilliere+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return filliereRepository.chercherFilliere("%" + nomfilliere + "%", pageable);
     }
 
     @Override
     public Page<Groupe> chercherGroupe(String nomGrp, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return groupRepository.chercherGroupe("%"+nomGrp+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return groupRepository.chercherGroupe("%" + nomGrp + "%", pageable);
     }
 
     @Override
     public Page<Sujet> afficherAllSujet(int page, int size) {
-        Pageable pageable= PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return sujetRepository.affichierSujet(pageable);
     }
 
     @Override
     public Page<Sujet> chercherSujet(String titreSujet, int page, int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        return sujetRepository.chercherSujet("%"+titreSujet+"%",pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return sujetRepository.chercherSujet("%" + titreSujet + "%", pageable);
     }
 
     @Override
@@ -637,14 +625,14 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     }
 
     @Override
-    public Etudiant afficherByIdEtudiant(long id)
-    {
+    public Etudiant afficherByIdEtudiant(long id) {
         return etudiantRepository.findById(id).get();
     }
 
     @Override
     public Sujet afficherByIdSujet(long id) {
-        return sujetRepository.findById(id).get();    }
+        return sujetRepository.findById(id).get();
+    }
 
     @Override
     public void supprimerSujet(Long id) {
@@ -656,7 +644,6 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
         this.niveouRepository.deleteById(id);
 
     }
-
 
 
 //
@@ -716,7 +703,7 @@ paramatragePeriodePropose.setFinperiodeProposesujet(finperiodeProposesujet);
     public String getNomEnsgniet() {
         Ensigniant ensigniant1 = new Ensigniant();
         ensigniant1.getNomEnseigniant();
-        return  getNomEnsgniet();
+        return getNomEnsgniet();
     }
 }
 

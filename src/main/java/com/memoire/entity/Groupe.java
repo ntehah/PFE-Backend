@@ -31,7 +31,6 @@ public class Groupe implements Serializable {
     @JsonIgnore
     private Collection<Etudiant> etudiants = new ArrayList<>();
     @ManyToOne
-    @JsonIgnore
     private Filliere filliere;
     @ManyToOne
     private Niveau niveau;

@@ -54,9 +54,8 @@ public class Filliere {
     @JsonFormat(pattern = "dd-MM-yyyy")
 
     private Date DateFinSoutenance;
-    @ManyToOne
-    @JsonIgnore
-    private ParamatrageAnnee paramatrageAnnee;
+
+    private String paramatrageAnnee;
 
     @ManyToOne
     @JsonIgnore
@@ -140,11 +139,6 @@ public class Filliere {
     public void setFinperiodeProposesujet(Date finperiodeProposesujet) {
         this.finperiodeProposesujet = finperiodeProposesujet;
     }
-
-    public ParamatrageAnnee getParamatrageAnnee() {
-        return paramatrageAnnee;
-    }
-
     public Date getDateDebutSoutenance() {
         return dateDebutSoutenance;
     }
@@ -161,7 +155,11 @@ public class Filliere {
         DateFinSoutenance = dateFinSoutenance;
     }
 
-    public void setParamatrageAnnee(ParamatrageAnnee paramatrageAnnee) {
+    public String getParamatrageAnnee() {
+        return paramatrageAnnee;
+    }
+
+    public void setParamatrageAnnee(String paramatrageAnnee) {
         this.paramatrageAnnee = paramatrageAnnee;
     }
 }
